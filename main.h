@@ -1,7 +1,3 @@
-//
-// Created by Alican Gökce on 06.05.24.
-//
-
 #ifndef PRAKBS21_MAIN_H
 #define PRAKBS21_MAIN_H
 

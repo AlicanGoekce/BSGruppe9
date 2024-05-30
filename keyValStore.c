@@ -1,73 +1,35 @@
-//
-// Created by Alican Gökce on 06.05.24.
-//
-
 #include "keyValStore.h"
-
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
-typedef struct Node {
-    char *key;
-    char *value;
-    struct Node *next;
-} Node;
-
-Node *head = NULL;
-
-// Utility functions for data storage system
-Node* createNode(char *key, char *value) {
-    Node *newNode = (Node*)malloc(sizeof(Node));
-    newNode->key = strdup(key);
-    newNode->value = strdup(value);
-    newNode->next = NULL;
-    return newNode;
-}
-
-int put(char *key, char *value) {
-    Node **cur = &head;
-    while (*cur) {
-        if (strcmp((*cur)->key, key) == 0) {
-            free((*cur)->value);
-            (*cur)->value = strdup(value);
-            return 1; // Key exists, value updated.
+void put(KeyValueStore *kv_store, const char *key, const char *value) {
+    for (int i = 0; i < STORE_SIZE; i++) {
+        if (!kv_store->store[i].in_use || strcmp(kv_store->store[i].key, key) == 0) {
+            strncpy(kv_store->store[i].key, key, KEY_SIZE);
+            strncpy(kv_store->store[i].value, value, VALUE_SIZE);
+            kv_store->store[i].in_use = true;
+            return;
         }
-        cur = &(*cur)->next;
     }
-    Node *newNode = createNode(key, value);
-    newNode->next = *cur;
-    *cur = newNode;
-    return 0; // New key-value pair added.
 }
 
-int get(char *key, char **res) {
-    Node *cur = head;
-    while (cur) {
-        if (strcmp(cur->key, key) == 0) {
-            *res = cur->value;
-            return 1; // Key found.
+bool get(KeyValueStore *kv_store, const char *key, char *value) {
+    for (int i = 0; i < STORE_SIZE; i++) {
+        if (kv_store->store[i].in_use && strcmp(kv_store->store[i].key, key) == 0) {
+            strncpy(value, kv_store->store[i].value, VALUE_SIZE);
+            return true;
         }
-        cur = cur->next;
     }
-    return -1; // Key not found.
+    return false;
 }
 
-int del(char *key) {
-    Node **cur = &head, *temp;
-    while (*cur) {
-        if (strcmp((*cur)->key, key) == 0) {
-            temp = *cur;
-            *cur = (*cur)->next;
-            free(temp->key);
-            free(temp->value);
-            free(temp);
-            return 1; // Key deleted.
+bool del(KeyValueStore *kv_store, const char *key) {
+    for (int i = 0; i < STORE_SIZE; i++) {
+        if (kv_store->store[i].in_use && strcmp(kv_store->store[i].key, key) == 0) {
+            kv_store->store[i].in_use = false;
+            return true;
         }
-        cur = &(*cur)->next;
     }
-    return -1; // Key not found.
+    return false;
 }
-
 
 
