@@ -1,16 +1,24 @@
-//
-// Created by Alican Gökce on 06.05.24.
-//
+#ifndef KEYVALSTORE_H
+#define KEYVALSTORE_H
 
-#ifndef PRAKBS21_KEYVALSTORE_H
-#define PRAKBS21_KEYVALSTORE_H
+#include <stdbool.h>
 
-int put(char* key, char* value);
-int get(char* key, char** res);
-int del(char* key);
+#define KEY_SIZE 256
+#define VALUE_SIZE 256
+#define STORE_SIZE 1024
 
-#endif //PRAKBS21_KEYVALSTORE_H
+typedef struct {
+    char key[KEY_SIZE];
+    char value[VALUE_SIZE];
+    bool in_use;
+} KeyValuePair;
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+typedef struct {
+    KeyValuePair store[STORE_SIZE];
+} KeyValueStore;
+
+void put(KeyValueStore *kv_store, const char *key, const char *value);
+bool get(KeyValueStore *kv_store, const char *key, char *value);
+bool del(KeyValueStore *kv_store, const char *key);
+
+#endif
