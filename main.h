@@ -1,22 +1,22 @@
-#ifndef PRAKBS21_MAIN_H
-#define PRAKBS21_MAIN_H
-
-#endif //PRAKBS21_MAIN_H
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/time.h>
-#include <stdbool.h>
 #include <string.h>
-#include <unistd.h>
+#ifdef __WIN32__
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#else
 #include <sys/socket.h>
+#endif
 #include <netinet/in.h>
+#include <unistd.h>
 
+#include "keyValStore.h"
+#include "sub.h"
+#include "sys/shm.h"
+#include "sys/sem.h"
 
+#ifndef UNTITLED_MAIN_H
+#define UNTITLED_MAIN_H
 
-
-
-
-#define TRUE 1
-#define ENDLOSSCHLEIFE 1
+#endif //UNTITLED_MAIN_H

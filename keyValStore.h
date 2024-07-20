@@ -1,24 +1,25 @@
-#ifndef KEYVALSTORE_H
-#define KEYVALSTORE_H
 
-#include <stdbool.h>
 
-#define KEY_SIZE 256
-#define VALUE_SIZE 256
-#define STORE_SIZE 1024
+int put( char * key, char * value);
+int get( char * key, char * res);
+int del( char * key, char * msg);
+void initializeKeyAndValueSharedMemory();
+void releaseKeyAndValueSharedMemory();
 
-typedef struct {
-    char key[KEY_SIZE];
-    char value[VALUE_SIZE];
-    bool in_use;
-} KeyValuePair;
-
-typedef struct {
-    KeyValuePair store[STORE_SIZE];
-} KeyValueStore;
-
-void put(KeyValueStore *kv_store, const char *key, const char *value);
-bool get(KeyValueStore *kv_store, const char *key, char *value);
-bool del(KeyValueStore *kv_store, const char *key);
-
+#include <string.h>
+#include <stdio.h>
+#include "sys/shm.h"
+#ifdef __WIN32__
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#else
+#include <sys/socket.h>
 #endif
+#include <netinet/in.h>
+#include <unistd.h>
+#include <sys/msg.h>
+
+#ifndef UNTITLED_KEYVALSTORE_H
+#define UNTITLED_KEYVALSTORE_H
+
+#endif //UNTITLED_KEYVALSTORE_H
